@@ -1,17 +1,10 @@
-import { useState } from 'react'
+import { BrowserRouter } from 'react-router-dom'
+import { EmployeesRoutes } from '@/routes/EmployeesRoutes.tsx'
 
-function App() {
-  const [count, setCount] = useState(0)
-
+export function App() {
   return (
-    <div className="w-[100svw] h-[100svh] flex flex-col justify-center items-center bg-base-300">
-      <h1 className="text-2xl">Count: {count}</h1>
-      <button className="btn btn-primary" onClick={() => {
-        setCount(count + 1)
-      }}>Increment
-      </button>
-    </div>
+    <BrowserRouter>
+      <EmployeesRoutes />
+    </BrowserRouter>
   )
 }
-
-export default App
