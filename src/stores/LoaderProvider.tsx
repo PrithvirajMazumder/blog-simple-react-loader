@@ -2,16 +2,22 @@ import { createContext, ReactNode, useContext, useEffect, useState } from 'react
 
 export type LoaderContextProps = {
   isLoading: boolean
-  start: () => void
+  loaderText: string
+  start: (loaderText?: string) => void
   stop: () => void
 }
-const LoaderContext = createContext<LoaderContextProps | null>(null)
+
+export const LoaderContext = createContext<LoaderContextProps>({} as LoaderContextProps)
 
 export const LoaderProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(false)
+  const [loaderText, setLoaderText] = useState('')
   const [loaderStack, setLoaderStack] = useState<Array<boolean>>([])
 
-  const start = () => setLoaderStack([...loaderStack, true])
+  const start = (loaderText = 'Loader...') => {
+    setLoaderText(loaderText)
+    setLoaderStack([...loaderStack, true])
+  }
 
   const stop = () => setLoaderStack([...loaderStack.slice(1)])
 
@@ -28,7 +34,8 @@ export const LoaderProvider = ({ children }: { children: ReactNode }) => {
       value={{
         isLoading,
         start,
-        stop
+        stop,
+        loaderText
       }}
     >
       {children}
@@ -38,8 +45,13 @@ export const LoaderProvider = ({ children }: { children: ReactNode }) => {
 
 export const useLoader = () => {
   const loaderContext = useContext(LoaderContext)
+
   if (!loaderContext) {
     throw new Error('Please use useLoader inside the context of LoaderProvider')
   }
-  return loaderContext
+
+  return {
+    start: loaderContext.start,
+    stop: loaderContext.stop
+  }
 }

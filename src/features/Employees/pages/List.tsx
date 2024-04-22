@@ -13,7 +13,7 @@ export const EmployeesList = () => {
       const employees = await fetchEmployees()
       setEmployees(employees)
     } catch (e) {
-      console.log('Employees cannot be fetched!')
+      alert('Employees cannot be fetched!')
     } finally {
       loader.stop()
     }
@@ -30,20 +30,21 @@ export const EmployeesList = () => {
   return (
     <>
       <h1 className="text-3xl font-bold mb-4">Employees</h1>
-      <div className="overflow-x-auto">
+      <button className="btn btn-primary btn-sm" onClick={getEmployees}>
+        Re-fetch
+      </button>
+      <div className="overflow-x-auto mt-8">
         <table className="table w-full">
           <thead>
             <tr>
-              <th></th>
               <th>Name</th>
               <th>Email</th>
               <th>Phone</th>
             </tr>
           </thead>
           <tbody>
-            {employees.map((employee, index) => (
+            {employees.map((employee) => (
               <tr key={employee.id}>
-                <th>{index + 1}</th>
                 <td>{employee.name}</td>
                 <td>{employee.email}</td>
                 <td>{employee.phone}</td>
@@ -51,9 +52,6 @@ export const EmployeesList = () => {
             ))}
           </tbody>
         </table>
-      </div>
-      <div className="w-full flex justify-center mt-4">
-        <button className="btn btn-primary btn-sm" onClick={getEmployees}>Re-fetch</button>
       </div>
     </>
   )
